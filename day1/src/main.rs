@@ -1,3 +1,4 @@
+use itertools::Itertools;
 fn main() {
     let nums = include_str!("input")
                 .split('\n')
@@ -5,17 +6,13 @@ fn main() {
                 .map(Result::unwrap)
                 .collect::<Vec<i32>>();
     
-    println!("Puzzle 1 result {}",solve(&nums,1));
-    println!("Puzzle 2 result {}",solve(&nums,3));
+    println!("Puzzle 1 result {}",solve1(&nums));
+    println!("Puzzle 2 result {}",solve2(&nums));
 }
-fn solve(nums : &[i32],gap:usize)->i32{
-    
-    let mut count = 0;
-    for i in gap..nums.len(){
-        if nums[i] > nums[i-gap]{
-            count+=1
-        }
-    }
-    count
-    
+
+fn solve1(nums : &[i32])->usize{
+    nums.iter().tuple_windows().filter(|(x,y)| x<y).count()
+}
+fn solve2(nums : &[i32])->usize{
+    nums.iter().tuple_windows().filter(|(p,_,_,z)| p<z).count()
 }
