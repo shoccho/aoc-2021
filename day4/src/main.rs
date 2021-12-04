@@ -4,12 +4,14 @@ const NULL: i32 = -5;
 
 #[derive(Debug)]
 struct Board {
-    nums : [[i32;SIZE];SIZE]
+    nums : [[i32;SIZE];SIZE],
+    won : bool
 }
 impl Board {
     fn new()->Self{
         Board{
-            nums :[[0;SIZE];SIZE]
+            nums :[[0;SIZE];SIZE],
+            won:false
         }
     }
     fn from_str(chunk :Vec<&str>)->Self{
@@ -61,10 +63,11 @@ impl Board {
 fn main() {
    
     solve1();
+    solve2();
 }
 
 fn solve1(){
-     let mut lines = include_str!("input").lines().collect::<Vec<&str>>();
+    let mut lines = include_str!("input").lines().collect::<Vec<&str>>();
     let numbers = lines.first().unwrap().split(',').map(|x|->i32{x.parse().unwrap()}).collect::<Vec<i32>>();
     lines.drain(0..1);
     let mut boards :Vec<Board> = lines.into_iter().tuples().into_iter().map(|(_,a,b,c,d,e)| Board::from_str(vec![a,b,c,d,e]) ).collect();
@@ -84,4 +87,27 @@ fn solve1(){
             }
         }
     }
+}
+fn solve2(){
+    let mut lines = include_str!("input").lines().collect::<Vec<&str>>();
+    let numbers = lines.first().unwrap().split(',').map(|x|->i32{x.parse().unwrap()}).collect::<Vec<i32>>();
+    lines.drain(0..1);
+    let mut boards :Vec<Board> = lines.into_iter().tuples().into_iter().map(|(_,a,b,c,d,e)| Board::from_str(vec![a,b,c,d,e]) ).collect();
+
+    let mut last =0;
+    for number in numbers{
+        
+        for i in 0..boards.len(){
+            if boards[i].won{
+                continue;
+            }
+            boards[i].mark(number);
+
+            if boards[i].check(){
+                boards[i].won=true;
+               last = number * boards[i].sum();    
+            }         
+        }
+    }
+    println!("{}",last);
 }
