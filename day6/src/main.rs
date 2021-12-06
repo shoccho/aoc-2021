@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 struct LanternFish{
     days:usize,
     mature: bool
@@ -16,7 +14,6 @@ impl LanternFish{
             self.days-=1;
             return None;
         }else{
-            
             self.days = 6;
             if !self.mature {
                 self.mature = true;
